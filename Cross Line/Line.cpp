@@ -35,12 +35,16 @@ double CLine::vector_Mult(int a, int b, int c)
 // ÅÐ¶ÏÏß¶ÎÊÇ·ñ½»²æ
 bool CLine::line_Cross(CLine l)
 {
-	if (max(my_point[this->a].x, my_point[this->b].x) < min(my_point[l.a].x, my_point[l.b].x)) return false;
-	if (max(my_point[this->a].y, my_point[this->b].y) < min(my_point[l.a].y, my_point[l.b].y)) return false;
-	if (max(my_point[l.a].x, my_point[l.b].x) < min(my_point[this->a].x, my_point[this->b].x)) return false;
-	if (max(my_point[l.a].y, my_point[l.b].y) < min(my_point[this->a].y, my_point[this->b].y)) return false;
-	if (vector_Mult(this->a, l.a, this->b)	* vector_Mult(this->a, this->b, l.b) <= 0)	return false;
-	if (vector_Mult(l.a, this->a, l.b)		* vector_Mult(l.a, l.b, this->b) <= 0)		return false;
+	if (vector_Mult(this->a, l.a, this->b) == 0 && vector_Mult(this->a, this->b, l.b) == 0)
+	{
+		if (max(my_point[this->a].x, my_point[this->b].x) >= max(my_point[l.a].x, my_point[l.b].x) && 
+			max(my_point[this->a].y, my_point[this->b].y) >= max(my_point[l.a].y, my_point[l.b].y) &&
+			min(my_point[l.a].x, my_point[l.b].x) >= min(my_point[this->a].x, my_point[this->b].x) && 
+			min(my_point[l.a].y, my_point[l.b].y) >= min(my_point[this->a].y, my_point[this->b].y))
+			return true;
+	}
+	if (vector_Mult(this->a, l.a, this->b)	* vector_Mult(this->a, this->b, l.b)	<= 0)	return false;
+	if (vector_Mult(l.a, this->a, l.b)		* vector_Mult(l.a, l.b, this->b)		<= 0)	return false;
 	return true;
 }
 // ÅÐ¶ÏÏß¶ÎÊÇ·ñ½»²æ
