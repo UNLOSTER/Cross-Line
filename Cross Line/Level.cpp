@@ -58,10 +58,7 @@ void CLevel::inter_Face_Running()
 				cb = 1;
 
 				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
 					return;
-				}
 			}
 			else
 				cb = 0;
@@ -77,7 +74,6 @@ void CLevel::inter_Face_Running()
 
 					if (msg.uMsg == WM_LBUTTONUP)
 					{
-						msg.uMsg = WM_MOUSEMOVE;
 						pasin = i;
 						in = new CPlay();
 						in->inter_Face_Running();

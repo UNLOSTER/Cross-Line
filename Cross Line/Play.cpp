@@ -62,7 +62,6 @@ void CPlay::inter_Face_Running()
 
 					if (msg.uMsg == WM_LBUTTONUP)
 					{
-						msg.uMsg = WM_MOUSEMOVE;
 						in = new CWin();
 						in->inter_Face_Running();
 						delete in;
@@ -109,10 +108,7 @@ void CPlay::inter_Face_Running()
 					rb = 1;
 
 					if (msg.uMsg == WM_LBUTTONUP)
-					{
-						msg.uMsg = WM_MOUSEMOVE;
 						return;
-					}
 				}
 				else
 					rb = 0;
@@ -124,7 +120,6 @@ void CPlay::inter_Face_Running()
 
 					if (msg.uMsg == WM_LBUTTONUP)
 					{
-						msg.uMsg = WM_MOUSEMOVE;
 						clear();
 						read_Level();
 					}
@@ -139,7 +134,6 @@ void CPlay::inter_Face_Running()
 
 					if (msg.uMsg == WM_LBUTTONUP)
 					{
-						msg.uMsg = WM_MOUSEMOVE;
 						clear();
 						pasin++;
 						if (pasin > pass_num)

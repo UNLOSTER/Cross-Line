@@ -36,10 +36,7 @@ void CAbout::inter_Face_Running()
 				rb = 1;
 
 				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
 					return;
-				}
 			}
 			else
 				rb = 0;

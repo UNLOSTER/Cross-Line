@@ -61,7 +61,6 @@ void CWin::inter_Face_Running()
 
 				if (msg.uMsg == WM_LBUTTONUP)
 				{
-					msg.uMsg = WM_MOUSEMOVE;
 					pasin = 0;
 					return;
 				}
@@ -75,10 +74,7 @@ void CWin::inter_Face_Running()
 				ab = 1;
 
 				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
 					return;
-				}
 			}
 			else
 				ab = 0;
@@ -90,7 +86,6 @@ void CWin::inter_Face_Running()
 
 				if (msg.uMsg == WM_LBUTTONUP)
 				{
-					msg.uMsg = WM_MOUSEMOVE;
 					pasin++;
 					if (pasin > pass_num)
 						pasin = pass_num;

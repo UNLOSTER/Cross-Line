@@ -42,7 +42,6 @@ void CBegin::inter_Face_Running()
 
 				if (msg.uMsg == WM_LBUTTONUP)
 				{
-					msg.uMsg = WM_MOUSEMOVE;
 					in = new CLevel();
 					in->inter_Face_Running();
 					delete in;
@@ -59,7 +58,6 @@ void CBegin::inter_Face_Running()
 
 				if (msg.uMsg == WM_LBUTTONUP)
 				{
-					msg.uMsg = WM_MOUSEMOVE;
 					in = new CAbout();
 					in->inter_Face_Running();
 					delete in;
