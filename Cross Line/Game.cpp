@@ -21,14 +21,4 @@ void CGame::clear_Board()
 }
 // 绘制背景
 
-
-
-// 获取鼠标消息
-void CGame::get_Msg()
-{
-	while (MouseHit())
-		msg = GetMouseMsg();
-}
-// 获取鼠标消息
-
 //***** 初始界面类成员函数实现 *****//

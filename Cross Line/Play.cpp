@@ -30,6 +30,7 @@ void CPlay::inter_Face_Running()
 	clear();
 	read_Level();
 	CButton_Image image;
+	bool rb = 0, ab = 0, nb = 0, ob = 0;
 	CButton return_button, again_button, next_button, ok_button;
 	return_button.set_Image(image.return_Button(RGB(224, 197, 150)));
 	again_button.set_Image(image.again_Button(RGB(224, 197, 150)));
@@ -50,31 +51,41 @@ void CPlay::inter_Face_Running()
 	{
 		if (if_Win())
 		{
+			while (MouseHit())
+			{
+				msg = GetMouseMsg();
+
+				// O K 按钮
+				if (ok_button.if_Mouse_On(msg))
+				{
+					ob = 1;
+
+					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = WM_MOUSEMOVE;
+						in = new CWin();
+						in->inter_Face_Running();
+						delete in;
+						in = NULL;
+						if (!pasin)
+							return;
+						clear();
+						read_Level();
+					}
+				}
+				else
+					ob = 0;
+			}
+
 			this->clear_Board();
 			this->draw_Title();
 			this->draw_Paper();
 			this->draw_Graph();
 
-			this->get_Msg();
-
-			// O K 按钮
-			if (ok_button.if_Mouse_On(msg))
+			if (ob)
 			{
 				ok_button.set_Image(image.ok_Button(RGB(66 + 15, 202 + 15, 184 + 15)));
 				ok_button.draw_Button();
-
-				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
-					in = new CWin();
-					in->inter_Face_Running();
-					delete in;
-					in = NULL;
-					if (!pasin)
-						return;
-					clear();
-					read_Level();
-				}
 			}
 			else
 			{
@@ -84,6 +95,62 @@ void CPlay::inter_Face_Running()
 		}
 		else
 		{
+			while (MouseHit())
+			{
+				msg = GetMouseMsg();
+
+				// 移动点
+				for (int i = 1; i <= point_num; i++)
+					this->point_Move(i);
+
+				// 返回按钮
+				if (return_button.if_Mouse_On(msg))
+				{
+					rb = 1;
+
+					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = WM_MOUSEMOVE;
+						return;
+					}
+				}
+				else
+					rb = 0;
+
+				// 重来按钮
+				if (again_button.if_Mouse_On(msg))
+				{
+					ab = 1;
+
+					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = WM_MOUSEMOVE;
+						clear();
+						read_Level();
+					}
+				}
+				else
+					ab = 0;
+
+				// 下一关按钮
+				if (next_button.if_Mouse_On(msg))
+				{
+					nb = 1;
+
+					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = WM_MOUSEMOVE;
+						clear();
+						pasin++;
+						if (pasin > pass_num)
+							pasin = pass_num;
+						read_Level();
+					}
+				}
+				else
+					nb = 0;
+			}
+
 			times = int(time(NULL)) - start_time;
 
 			this->clear_Board();
@@ -91,23 +158,11 @@ void CPlay::inter_Face_Running()
 			this->draw_Paper();
 			this->draw_Graph();
 
-			this->get_Msg();
-
-			// 移动点
-			for (int i = 1; i <= point_num; i++)
-				this->point_Move(i);
-
 			// 返回按钮
-			if (return_button.if_Mouse_On(msg))
+			if (rb)
 			{
 				return_button.set_Image(image.return_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 				return_button.draw_Button();
-
-				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
-					return;
-				}
 			}
 			else
 			{
@@ -116,17 +171,10 @@ void CPlay::inter_Face_Running()
 			}
 
 			// 重来按钮
-			if (again_button.if_Mouse_On(msg))
+			if (ab)
 			{
 				again_button.set_Image(image.again_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 				again_button.draw_Button();
-
-				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
-					clear();
-					read_Level();
-				}
 			}
 			else
 			{
@@ -135,20 +183,10 @@ void CPlay::inter_Face_Running()
 			}
 
 			// 下一关按钮
-			if (next_button.if_Mouse_On(msg))
+			if (nb)
 			{
 				next_button.set_Image(image.next_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 				next_button.draw_Button();
-
-				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
-					clear();
-					pasin++;
-					if (pasin > pass_num)
-						pasin = pass_num;
-					read_Level();
-				}
 			}
 			else
 			{

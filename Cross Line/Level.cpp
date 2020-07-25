@@ -24,6 +24,7 @@ void CLevel::inter_Face_Running()
 	pass_num = stat();
 	static int wheel = 0;
 	CButton_Image image;
+	bool cb = 0, lb[100] = {0};
 	int buffer_len = 50 * 2 + pass_num * image.level_Button(TEXT("0"),
 					TEXT("--:--"), RGB(0, 0, 0)).getheight() + (pass_num - 1) * 15;
 	int bar_len = WIN_HEIGHT * WIN_HEIGHT / buffer_len;
@@ -34,40 +35,75 @@ void CLevel::inter_Face_Running()
 	// 进入游戏
 	while (1)
 	{
+		while (MouseHit())
+		{
+			msg = GetMouseMsg();
+
+			// 处理滚轮消息
+			if (msg.uMsg == WM_MOUSEWHEEL)
+			{
+				wheel -= msg.wheel / 5 * 2;
+				msg.wheel = 0;
+
+				if (wheel > buffer_len - WIN_HEIGHT)
+					wheel = buffer_len - WIN_HEIGHT;
+
+				if (wheel < 0)
+					wheel = 0;
+			}
+
+			// 关闭按钮
+			if (close_button.if_Mouse_On(msg))
+			{
+				cb = 1;
+
+				if (msg.uMsg == WM_LBUTTONUP)
+				{
+					msg.uMsg = WM_MOUSEMOVE;
+					return;
+				}
+			}
+			else
+				cb = 0;
+
+			// 关卡按钮
+			for (int i = 1; i <= pass_num; i++)
+			{
+				lb[i] = 0;
+
+				if (level_button[i].if_Mouse_On(msg))
+				{
+					lb[i] = 1;
+
+					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = WM_MOUSEMOVE;
+						pasin = i;
+						in = new CPlay();
+						in->inter_Face_Running();
+						delete in;
+						in = NULL;
+					}
+				}
+			}
+		}
+
 		this->clear_Board();
-
-		this->get_Msg();
-
-		// 处理滚轮消息
-		wheel -= msg.wheel / 5 * 2;
-		msg.wheel = 0;
-
-		if (wheel > buffer_len - WIN_HEIGHT)
-			wheel = buffer_len - WIN_HEIGHT;
-
-		if (wheel < 0)
-			wheel = 0;
 
 		// 滚动条处理
 		setfillcolor(BASE_COLOR);
 		solidrectangle(	WIN_WIDTH - 5, wheel * WIN_HEIGHT / buffer_len, 
 						WIN_WIDTH,		wheel * WIN_HEIGHT / buffer_len + bar_len);
-
+		
 		// 关闭按钮
-		if (close_button.if_Mouse_On(msg))
+		if (cb)
 		{
 			close_button.set_Image(image.close_Button(RGB(125, 125, 125)));
 			close_button.draw_Button();
-
-			if (msg.uMsg == WM_LBUTTONUP)
-			{
-				msg.uMsg = WM_MOUSEMOVE;
-				return;
-			}
 		}
 		else
 		{
-			close_button.set_Image(image.close_Button(TEXT_COLOR));
+			close_button.set_Image(TEXT_COLOR);
 			close_button.draw_Button();
 		}
 
@@ -76,52 +112,37 @@ void CLevel::inter_Face_Running()
 		{
 			wchar_t num[100];
 			swprintf_s(num, TEXT("%d"), i);
-
 			wchar_t file_name[100] = TEXT("Level\\");
 			swprintf_s(file_name, TEXT("Level\\%s.txt"), num);	// 导入关卡编号
 
+			wchar_t time_info[100];
 			std::wfstream file;
 			file.open(file_name, std::ios::in | std::ios::out);
-
-			wchar_t time_info[100];
 			file >> best_time;
 			swprintf_s(time_info, TEXT("最佳：%s"), best_time);	// 导入最佳时间
+			file.close();
 
-			if (i % 2 == 1)
-				level_button[i].set_Image(image.level_Button(num, time_info, RGB(206, 207, 141)));
-			else
-				level_button[i].set_Image(image.level_Button(num, time_info, RGB(223, 195, 123)));
 			level_button[i].set_X_Y(WIN_WIDTH / 2 - level_button[i].get_Image().getwidth() / 2,
-				50 - wheel + (level_button[i].get_Image().getheight() + 15) * (i - 1));	// 设置按钮
+				50 - wheel + (level_button[i].get_Image().getheight() + 15) * (i - 1));
 
-			// 绘制关卡按钮
-			if (level_button[i].if_Mouse_On(msg))
+			if (lb[i])
 			{
 				if (i % 2 == 1)
 					level_button[i].set_Image(image.level_Button(num, time_info, RGB(206 + 15, 207 + 15, 141 + 15)));
 				else
 					level_button[i].set_Image(image.level_Button(num, time_info, RGB(223 + 15, 195 + 15, 123 + 15)));
-				level_button[i].set_X_Y(WIN_WIDTH / 2 - level_button[i].get_Image().getwidth() / 2,
-					50 - wheel + (level_button[i].get_Image().getheight() + 15) * (i - 1));
-				level_button[i].draw_Button();
-
-				if (msg.uMsg == WM_LBUTTONUP)
-				{
-					msg.uMsg = WM_MOUSEMOVE;
-					pasin = i;
-					in = new CPlay();
-					in->inter_Face_Running();
-					delete in;
-					in = NULL;
-				}
 			}
 			else
 			{
-				level_button[i].draw_Button();
+				if (i % 2 == 1)
+					level_button[i].set_Image(image.level_Button(num, time_info, RGB(206, 207, 141)));
+				else
+					level_button[i].set_Image(image.level_Button(num, time_info, RGB(223, 195, 123)));
 			}
 
-			file.close();
+			level_button[i].draw_Button();
 		}
+		
 
 		FlushBatchDraw();
 		Sleep(1);

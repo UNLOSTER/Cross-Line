@@ -22,6 +22,7 @@ void CWin::inter_Face_Running()
 {
 	// 设置和初始化
 	CButton_Image image;
+	bool rb = 0, ab = 0, nb = 0;
 	CButton return_button, again_button, next_button;
 	return_button.set_Image(image.return_Button(RGB(224, 197, 150)));
 	again_button.set_Image(image.again_Button(RGB(224, 197, 150)));
@@ -49,23 +50,65 @@ void CWin::inter_Face_Running()
 	// 进入游戏
 	while (1)
 	{
+		while (MouseHit())
+		{
+			msg = GetMouseMsg();
+
+			// 返回按钮
+			if (return_button.if_Mouse_On(msg))
+			{
+				rb = 1;
+
+				if (msg.uMsg == WM_LBUTTONUP)
+				{
+					msg.uMsg = WM_MOUSEMOVE;
+					pasin = 0;
+					return;
+				}
+			}
+			else
+				rb = 0;
+
+			// 重来按钮
+			if (again_button.if_Mouse_On(msg))
+			{
+				ab = 1;
+
+				if (msg.uMsg == WM_LBUTTONUP)
+				{
+					msg.uMsg = WM_MOUSEMOVE;
+					return;
+				}
+			}
+			else
+				ab = 0;
+
+			// 下一关按钮
+			if (next_button.if_Mouse_On(msg))
+			{
+				nb = 1;
+
+				if (msg.uMsg == WM_LBUTTONUP)
+				{
+					msg.uMsg = WM_MOUSEMOVE;
+					pasin++;
+					if (pasin > pass_num)
+						pasin = pass_num;
+					return;
+				}
+			}
+			else
+				nb = 0;
+		}
+
 		this->clear_Board();
 		this->draw_Title();
 
-		this->get_Msg();
-
 		// 返回按钮
-		if (return_button.if_Mouse_On(msg))
+		if (rb)
 		{
 			return_button.set_Image(image.return_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 			return_button.draw_Button();
-
-			if (msg.uMsg == WM_LBUTTONUP)
-			{
-				msg.uMsg = WM_MOUSEMOVE;
-				pasin = 0;
-				return;
-			}
 		}
 		else
 		{
@@ -74,16 +117,10 @@ void CWin::inter_Face_Running()
 		}
 
 		// 重来按钮
-		if (again_button.if_Mouse_On(msg))
+		if (ab)
 		{
 			again_button.set_Image(image.again_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 			again_button.draw_Button();
-
-			if (msg.uMsg == WM_LBUTTONUP)
-			{
-				msg.uMsg = WM_MOUSEMOVE;
-				return;
-			}
 		}
 		else
 		{
@@ -92,19 +129,10 @@ void CWin::inter_Face_Running()
 		}
 
 		// 下一关按钮
-		if (next_button.if_Mouse_On(msg))
+		if (nb)
 		{
 			next_button.set_Image(image.next_Button(RGB(224 + 15, 197 + 15, 150 + 15)));
 			next_button.draw_Button();
-
-			if (msg.uMsg == WM_LBUTTONUP)
-			{
-				msg.uMsg = WM_MOUSEMOVE;
-				pasin++;
-				if (pasin > pass_num)
-					pasin = pass_num;
-				return;
-			}
 		}
 		else
 		{

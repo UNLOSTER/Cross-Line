@@ -19,7 +19,6 @@ public:
 	
 protected:
 	void clear_Board();						// 绘制背景
-	void get_Msg();							// 获取鼠标消息
 };
 // 游戏总类
 
