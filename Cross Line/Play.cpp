@@ -201,19 +201,22 @@ void CPlay::inter_Face_Running()
 void CPlay::read_Level()
 {
 	// 打开文件
-	wchar_t file_name[100];
-	swprintf_s(file_name, TEXT("Level\\%d.txt"), pasin);
+	wchar_t app_name[100];
+	swprintf_s(app_name, TEXT("Level%d"), pasin);
 
-	std::wfstream file;
-	file.open(file_name, std::ios::in | std::ios::out);
-
-	file >> best_time;
+	GetPrivateProfileString(app_name, TEXT("Record"), TEXT("--:--:--"), best_time, 100, TEXT(".\\Level.ini"));
 
 	// 读取点信息
-	file >> this->point_num;
+	this->point_num = GetPrivateProfileInt(app_name, TEXT("DotCount"), 0, TEXT(".\\Level.ini"));
 	for (int i = 1; i <= this->point_num; i++)
 	{
-		file >> my_point[i].x >> my_point[i].y >> my_point[i].move;
+		wchar_t name[100];
+		swprintf_s(name, TEXT("DotData%d"), i);
+		wchar_t dot_data[100];
+		GetPrivateProfileString(app_name, name, TEXT("0,0,0"), dot_data, 100, TEXT(".\\Level.ini"));
+		int m = 0;
+		swscanf_s(dot_data, TEXT("%d,%d,%d"), &my_point[i].x, &my_point[i].y, &m);
+		my_point[i].move = m;
 		if (my_point[i].x == 0)
 			my_point[i].x = rand() % PAPER_POINT_HEIGHT + 1;
 		if (my_point[i].y == 0)
@@ -234,11 +237,15 @@ void CPlay::read_Level()
 	}
 
 	// 读取线信息
-	file >> this->line_num;
+	this->line_num = GetPrivateProfileInt(app_name, TEXT("LineCount"), 0, TEXT(".\\Level.ini"));
 	for (int i = 1; i <= this->line_num; i++)
-		file >> my_line[i].a >> my_line[i].b;
-
-	file.close();	// 关闭文件
+	{
+		wchar_t name[100];
+		swprintf_s(name, TEXT("LineData%d"), i);
+		wchar_t line_data[100];
+		GetPrivateProfileString(app_name, name, TEXT("0,0"), line_data, 100, TEXT(".\\Level.ini"));
+		swscanf_s(line_data, TEXT("%d,%d"), &my_line[i].a, &my_line[i].b);
+	}
 }
 // 读取关卡
 

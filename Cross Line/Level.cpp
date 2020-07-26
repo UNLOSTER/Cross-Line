@@ -108,15 +108,12 @@ void CLevel::inter_Face_Running()
 		{
 			wchar_t num[100];
 			swprintf_s(num, TEXT("%d"), i);
-			wchar_t file_name[100] = TEXT("Level\\");
-			swprintf_s(file_name, TEXT("Level\\%s.txt"), num);	// 导入关卡编号
+			wchar_t app_name[100];
+			swprintf_s(app_name, TEXT("Level%d"), i);			// 导入关卡编号
 
 			wchar_t time_info[100];
-			std::wfstream file;
-			file.open(file_name, std::ios::in | std::ios::out);
-			file >> best_time;
+			GetPrivateProfileString(app_name, TEXT("Record"), TEXT("--:--:--"), best_time, 100, TEXT(".\\Level.ini"));
 			swprintf_s(time_info, TEXT("最佳：%s"), best_time);	// 导入最佳时间
-			file.close();
 
 			level_button[i].set_X_Y(WIN_WIDTH / 2 - level_button[i].get_Image().getwidth() / 2,
 				50 - wheel + (level_button[i].get_Image().getheight() + 15) * (i - 1));
@@ -151,18 +148,21 @@ void CLevel::inter_Face_Running()
 // 统计关卡数
 int CLevel::stat()
 {
-	int n = 0;
-	wchar_t file_name[100];
-	std::wfstream file;
-	do
+	wchar_t app_name_all[1000] = { 0 };
+	int count = 0;
+	GetPrivateProfileSectionNames(app_name_all, 1000, TEXT(".\\Level.ini"));
+	for (int i = 0; i < 1000; i++)
 	{
-		file.close();
-		wcscpy_s(file_name, TEXT(""));
-		swprintf_s(file_name, TEXT("Level\\%d.txt"), ++n);
-		file.open(file_name, std::ios::in | std::ios::out);
-	} while (file.is_open());
-	file.close();
-	return (n - 1);
+		if (app_name_all[0] == '\0')
+			break;
+		if (app_name_all[i] == '\0')
+		{
+			count++;
+			if (app_name_all[i + 1] == '\0')
+				break;
+		}
+	}
+	return count;
 }
 // 统计关卡数
 

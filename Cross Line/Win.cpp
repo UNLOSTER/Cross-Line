@@ -36,7 +36,7 @@ void CWin::inter_Face_Running()
 
 	// 修改最佳时间
 	if (wcscmp(best_time, TEXT("--:--:--")) == 0)
-		this->change_best_time();
+		this->change_Best_Time();
 	else
 	{
 		int hour = 0, minute = 0, second = 0;
@@ -44,7 +44,7 @@ void CWin::inter_Face_Running()
 		long long hms = hour * 3600 + minute * 60 + second;
 
 		if (hms > times)
-			this->change_best_time();
+			this->change_Best_Time();
 	}
 	
 	// 进入游戏
@@ -144,35 +144,14 @@ void CWin::inter_Face_Running()
 
 
 // 修改最佳时间
-void CWin::change_best_time()
+void CWin::change_Best_Time()
 {
 	// 初始化
-	wchar_t file_name[100];
-	swprintf_s(file_name, TEXT("Level\\%d.txt"), pasin);
+	wchar_t app_name[100];
+	swprintf_s(app_name, TEXT("Level%d"), pasin);
 	wchar_t mfo[100];
 	swprintf_s(mfo, TEXT("%lld:%lld:%lld"), times / 3600, times / 60, times % 60);
-	std::wfstream in, out;
-	std::wstring wstr = mfo;
-	wstr += TEXT("\n");
-
-	// 保存文件
-	in.open(file_name, std::ios::in | std::ios::out);
-	wchar_t line[100];
-	int i = 0;
-	while (in.getline(line, sizeof(line)))
-	{
-		i++;
-		if (i == 1)
-			continue;
-		wstr += line;
-		wstr += TEXT("\n");
-	}
-	in.close();
-
-	// 修改文件
-	out.open(file_name, std::ios::in | std::ios::out | std::ios::trunc);
-	out << wstr.c_str();
-	out.close();
+	WritePrivateProfileString(app_name, TEXT("Record"), mfo, TEXT(".\\Level.ini"));
 }
 // 修改最佳时间
 
