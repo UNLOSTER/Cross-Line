@@ -1,4 +1,4 @@
-# Cross-Line V1.0
+﻿# Cross-Line V1.0
 ---
 项目：Cross-Line
 
@@ -31,3 +31,5 @@ Line.cpp :           线的结构类实现文件
 Button.cpp :         游戏按钮类实现文件
 Button_Image.cpp :   游戏按钮类实现文件
 ~~~
+### 运行效果：
+![play](https://f.myid.email/87/b9/bc/dddf9c-08f8-9660-72f26953eac1/Files/cross-line-game.png)
