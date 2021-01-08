@@ -32,4 +32,4 @@ Button.cpp :         游戏按钮类实现文件
 Button_Image.cpp :   游戏按钮类实现文件
 ~~~
 ### 运行效果：
-![play](https://f.myid.email/87/b9/bc/dddf9c-08f8-9660-72f26953eac1/Files/cross-line-game.png)
+![play]( https://f.myid.email/87/b9/bc/dddf9c-08f8-9660-72f26953eac1/Files/cross-line-game.png )
