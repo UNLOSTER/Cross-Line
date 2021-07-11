@@ -73,7 +73,7 @@ void CAbout::draw_Text()
 	LOGFONT font;
 	gettextstyle(&font);
 	font.lfQuality	= ANTIALIASED_QUALITY;
-	wcscpy_s(font.lfFaceName, TEXT("Œ¢»Ì—≈∫⁄ Light"));
+	wcscpy_s(font.lfFaceName, TEXT("Œ¢»Ì—≈∫⁄"));
 
 	// ªÊ÷∆±ÍÃ‚
 	font.lfHeight = 75;

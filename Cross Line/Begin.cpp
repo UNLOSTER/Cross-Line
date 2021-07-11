@@ -111,7 +111,7 @@ void CBegin::draw_Title()
 	gettextstyle(&font);
 	font.lfHeight	= 75;
 	font.lfQuality	= ANTIALIASED_QUALITY;
-	wcscpy_s(font.lfFaceName, TEXT("Î¢ÈíÑÅºÚ Light"));
+	wcscpy_s(font.lfFaceName, TEXT("Î¢ÈíÑÅºÚ"));
 	settextstyle(&font);
 	settextcolor(TEXT_COLOR);
 	outtextxy(	(WIN_WIDTH		- textwidth(	GAME_NAME))	/ 2, 

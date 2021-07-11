@@ -108,7 +108,10 @@ void CPlay::inter_Face_Running()
 					rb = 1;
 
 					if (msg.uMsg == WM_LBUTTONUP)
+					{
+						msg.uMsg = NULL;
 						return;
+					}
 				}
 				else
 					rb = 0;

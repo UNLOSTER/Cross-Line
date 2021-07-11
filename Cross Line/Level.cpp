@@ -53,6 +53,7 @@ void CLevel::inter_Face_Running()
 			}
 
 			// 关闭按钮
+			cb = 0;
 			if (close_button.if_Mouse_On(msg))
 			{
 				cb = 1;
@@ -60,8 +61,6 @@ void CLevel::inter_Face_Running()
 				if (msg.uMsg == WM_LBUTTONUP)
 					return;
 			}
-			else
-				cb = 0;
 
 			// 关卡按钮
 			for (int i = 1; i <= pass_num; i++)
@@ -79,6 +78,7 @@ void CLevel::inter_Face_Running()
 						in->inter_Face_Running();
 						delete in;
 						in = NULL;
+						lb[i] = 0;
 					}
 				}
 			}
@@ -99,7 +99,7 @@ void CLevel::inter_Face_Running()
 		}
 		else
 		{
-			close_button.set_Image(TEXT_COLOR);
+			close_button.set_Image(image.close_Button(TEXT_COLOR));
 			close_button.draw_Button();
 		}
 
